@@ -18,10 +18,10 @@ class Sorts {
    int aux = 0;
    string *temp;
 public:
-   int *input;
+   long long *input;
    string *inputString;
    int siz;
-   Sorts(int *in, int s);
+   Sorts(long long *in, int s);
    Sorts(string *in, int s);
    void sortHeuristic();
 private:
@@ -34,9 +34,9 @@ private:
    void radixString(int esq, int dir, int a);
 };
 
-Sorts::Sorts(int *in, int s) {
+Sorts::Sorts(long long *in, int s) {
 
-   input = new int[s];
+   input = new long long[s];
    siz = s;
    for(int i = 0;i < siz; i++) {
       input[i] = in[i];
@@ -55,7 +55,7 @@ Sorts::Sorts(string *in, int s) {
    isInt = 0;
 }
 void Sorts::insertion(int esq, int dir) {
-   int x;
+   long long x;
 
 	for(int j = esq + 1; j < dir + 1; ++j) {
 		x = input[j];
@@ -84,7 +84,9 @@ void Sorts::quick(int esq, int dir) {
 }
 
 int Sorts::partitionTest(int esq, int dir) {
-	int pivo, aux, indicePivo;
+	int indicePivo;
+   long long pivo;
+   long long aux;
 	indicePivo = (int) (dir);
 	pivo = input[indicePivo];
 	dir--;
@@ -109,9 +111,9 @@ int Sorts::partitionTest(int esq, int dir) {
 
 void Sorts::counting() {
 
-   int minimo = INT_MAX;
+   long long minimo = LLONG_MAX;
    int maximo = 0;
-   int dif = INT_MAX;
+   long long dif = LLONG_MAX;
    int aux = 0;
 
    for(int i = 0; i < siz; i++ )
@@ -125,14 +127,14 @@ void Sorts::counting() {
 	}
 
 	dif = (maximo - minimo) + 1;
-	int *help = new int[dif];
-	memset( help, 0, dif*sizeof(int));
+	long long *help = new long long[dif];
+	memset( help, 0, dif*sizeof(long long));
 
 	for( int i = 0; i < siz; i++ ){
       help[input[i] - minimo]++;
 	}
 
-	for(int i = minimo;i <= maximo;i++ )
+	for(long long i = minimo;i <= maximo;i++ )
 	{
       while(help[i - minimo] )
       {
@@ -141,65 +143,6 @@ void Sorts::counting() {
 	   }
 	}
 	free(help);
-}
-
-void Sorts::bucket() {
-   int index = 0;
-   int maximo = INT_MIN, minimo = INT_MAX, num;
-
-   for(int i = 0; i < siz; i++ )
-	{
-	    if( input[i] > maximo ){
-         maximo = input[i];
-	    }
-	    if( input[i] < minimo ){
-         minimo = input[i];
-	    }
-	}
-   int* help = new int[(maximo-minimo)+1];
-   for(int i=0;i<((maximo-minimo)+1);i++){
-      help[i] = 0;
-   }
-
-   for(int i = 0;i<siz;i++){
-      (help[input[i]-minimo])++;
-   }
-   int aux = 0;
-   for(int k = 0;k<((maximo-minimo)+1);k++) {
-      for(int j = 0;j<help[k];j++) {
-         input[aux++] = k + minimo;
-      }
-   }
-}
-
-void Sorts::radix() {
-
-    int maximo = input[0];
-    for (int i = 1; i < siz; i++){
-        if (input[i] > maximo){
-            maximo = input[i];
-        }
-    }
-
-    for (int e = 1; maximo/e > 0; e *= 10) {
-      int output[siz];
-      int i, help[10] = {0};
-      for (i = 0; i < siz; i++)
-         help[(input[i]/e)%10 ]++;
-
-      for (i = 1; i < 10; i++){
-         help[i] += help[i - 1];
-      }
-
-      for (i = siz - 1; i >= 0; i--)
-      {
-         output[help[(input[i]/e)%10 ] - 1] = input[i];
-         help[(input[i]/e)%10 ]--;
-      }
-      for (i = 0; i < siz; i++) {
-         input[i] = output[i];
-      }
-   }
 }
 
 void Sorts::radixString(int esq, int dir, int a) {
@@ -227,7 +170,7 @@ void Sorts::radixString(int esq, int dir, int a) {
 void Sorts::sortHeuristic() {
    int ord = 0;
    int cond = 0;
-   int maximo = INT_MIN, minimo = INT_MAX;
+   long long maximo = LLONG_MIN, minimo = LLONG_MAX;
 
 
    if(isInt) {
@@ -242,8 +185,8 @@ void Sorts::sortHeuristic() {
          	minimo = input[i];
          }
       }
-
-      if((int)((maximo - minimo)/log10(siz)) >= (siz)){
+      
+      if((long long)((maximo - minimo)/(long long)log10(siz)) >= (long long)(siz)){
       	cond = 3;
       }
 
@@ -280,10 +223,11 @@ void Sorts::sortHeuristic() {
 
 int main(int argc, char* argv[]) {
 
-   int siz, taxableIncome, aux = 0;
+   int siz, aux = 0;
+   long long taxableIncome;
    int isInt = 0;
    cin >> siz;
-   int *input = new int[siz];
+   long long*input = new long long[siz];
    string *inputString = new string[siz];
 
    for(int i = 0; i < siz; i++) {
@@ -297,7 +241,7 @@ int main(int argc, char* argv[]) {
       }
 
       if(isInt == 1) {
-         input[i] = atoi(inputString[i].c_str());
+         input[i] = atoll(inputString[i].c_str());
       }
    }
 
@@ -327,14 +271,14 @@ int main(int argc, char* argv[]) {
 
       for(int i = 0; i < siz; i++) {
          if(i != (siz - 1)) {
-            cout << sorts->inputString[i] << endl;
+            //cout << sorts->inputString[i] << endl;
          }
          else {
-            cout << sorts->inputString[i];
+            //cout << sorts->inputString[i];
          }
       }
 	}
 
-   printf("\nTempo gasto: %4.0f ms\n\n",1000*(double)(endTime-startTime)/(double)(CLOCKS_PER_SEC));
+   printf("\nTempo gasto: %.4f ms\n\n",1000*(double)(endTime-startTime)/(double)(CLOCKS_PER_SEC));
    
 }
